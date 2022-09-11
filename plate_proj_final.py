@@ -1,3 +1,4 @@
+import random
 import pandas as pd
 
 from kivy.graphics import Color, Ellipse, Rectangle
@@ -23,6 +24,9 @@ posl = []
 labw = []
 vol = []
 smpn = []
+
+color_glb = [255/255,206/255,11/255]
+bool_samp = False
 
 class ScrollViewWidget(FocusBehavior, CompoundSelectionBehavior, ScrollView):
 
@@ -67,7 +71,11 @@ class RoundButton(ButtonBehavior, Label):
 
     def on_press(self, *args):
         print(str(self.pos) + ' : ' + str(self.size))
-        self.background_color = (1, 0.5, 0, 1)
+
+        # This line sets the color of the button after pressing
+        lst = rand_color()
+        print(lst)
+        self.background_color = (lst[0], lst[1], lst[2], 1)
         posl.append(self.get_txt())
 
         temp_vol = ''
@@ -164,10 +172,14 @@ class RootScreen(FocusBehavior, CompoundSelectionBehavior, GridLayout):
                                   mode='rectangle',
                                   max_text_length=5))
 
-        sl.add_widget(MDTextField(hint_text='Sample Name',
+        txt_field = MDTextField(hint_text='Sample Name',
                                   text_color=(1, 1, 1, 1),
                                   background_color=(1, 1, 1, 1),
-                                  mode='rectangle'))
+                                  mode='rectangle')
+
+        txt_field.bind(on_double_tap=self.trig_color)
+
+        sl.add_widget(txt_field)
 
         act_button = Button(text='Reset Worklist', size=(50, 33))
         act_button.bind(on_release=self.cleardata)
@@ -193,6 +205,10 @@ class RootScreen(FocusBehavior, CompoundSelectionBehavior, GridLayout):
 
         self.add_widget(sv)
         self.add_widget(sl)
+
+    def trig_color(self, *args):
+        global bool_samp
+        bool_samp = True
 
     def gen_wl(self, *args):
         df = pd.DataFrame({'Position': posl, 'Labware': labw, 'Sample Name': smpn, 'Volume': vol})
@@ -295,6 +311,25 @@ class PlateApp(MDApp):
 
     def ResetButtons(self):
         pass
+
+def rand_color():
+    global color_glb
+    global bool_samp
+
+    colorlist = [[255/255,206/255,11/255],
+                 [232/255,63/255,104/255],
+                 [171/255,62/255,143/255],
+                 [0/255,146/255,214/255],
+                 [0/255,169/255,137/255]]
+
+    color = random.choice(colorlist)
+    if color == color_glb:
+        rand_color()
+    elif bool_samp:
+        color_glb = color
+        bool_samp = False
+
+    return color_glb
 
 if __name__ == '__main__':
     PlateApp().run()
