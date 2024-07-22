@@ -159,13 +159,13 @@ class RootScreen(FocusBehavior, CompoundSelectionBehavior, GridLayout):
         sl.add_widget(MDTextField(ids={1: 'Vol'},
                                   hint_text='Volume in \u03BCL',
                                   hint_text_color=(1, 1, 1, 1),
-                                  text_color=(1, 1, 1, 1),
+                                  #text_color=(1, 1, 1, 1),
                                   background_color=(1, 1, 1, 1),
                                   mode='rectangle',
                                   max_text_length=5))
 
         sl.add_widget(MDTextField(hint_text='Sample Name',
-                                  text_color=(1, 1, 1, 1),
+                                  #text_color=(1, 1, 1, 1),
                                   background_color=(1, 1, 1, 1),
                                   mode='rectangle'))
 
